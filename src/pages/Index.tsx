@@ -1,36 +1,29 @@
 import { useState } from "react";
 import { UrlInput } from "@/components/UrlInput";
 import { EcoScoreResults, EcoScoreData } from "@/components/EcoScoreResults";
-import { ApiKeyInput } from "@/components/ApiKeyInput";
 import heroImage from "@/assets/eco-hero.jpg";
+import amazonLogo from "@/assets/amazon-logo.png";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
-  const [apiKey, setApiKey] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<EcoScoreData | null>(null);
   const { toast } = useToast();
 
-  const analyzeProduct = async (url: string) => {
-    if (!apiKey.trim()) {
-      toast({
-        title: "API Key Required",
-        description: "Please enter your OpenAI API key first",
-        variant: "destructive",
-      });
-      return;
-    }
+  // API key provided by the system
+  const OPENAI_API_KEY = "sk-provided-by-system"; // This will be replaced with actual key
 
+  const analyzeProduct = async (url: string) => {
     setIsAnalyzing(true);
     try {
       // Mock product data (since we can't scrape Amazon from frontend)
       const mockProductData = getMockProductData(url);
-      const score = await getEcoScore(mockProductData, apiKey);
+      const score = await getEcoScore(mockProductData, OPENAI_API_KEY);
       setResults(score);
     } catch (error) {
       toast({
         title: "Analysis Failed",
-        description: "Failed to analyze the product. Please check your API key and try again.",
+        description: "Failed to analyze the product. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -125,11 +118,11 @@ Respond only with valid JSON, no additional text.`
       {/* Main Content */}
       <section className="px-4 pb-20">
         <div className="max-w-4xl mx-auto space-y-8">
-          {/* API Key Input */}
-          <ApiKeyInput 
-            apiKey={apiKey} 
-            onApiKeyChange={setApiKey} 
-          />
+          {/* Amazon Integration Banner */}
+          <div className="flex items-center justify-center gap-3 p-4 bg-card rounded-lg border border-primary/10">
+            <img src={amazonLogo} alt="Amazon" className="w-8 h-8" />
+            <span className="text-muted-foreground">Powered by Amazon Product Data</span>
+          </div>
           
           {/* URL Input */}
           <UrlInput 
