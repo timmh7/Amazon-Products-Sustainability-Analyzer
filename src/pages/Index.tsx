@@ -100,39 +100,70 @@ Respond only with valid JSON, no additional text.`
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-eco-surface to-background">
       {/* Hero Section */}
-      <section className="relative py-20 px-4">
+      <section className="relative py-20 px-4 overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center opacity-10"
+          className="absolute inset-0 bg-cover bg-center opacity-10 animate-fade-in"
           style={{ backgroundImage: `url(${heroImage})` }}
         />
+        {/* Floating particles animation */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/20 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-eco-good/30 rounded-full animate-pulse delay-300"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-primary/15 rounded-full animate-pulse delay-700"></div>
+        </div>
+        
         <div className="relative max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-eco-good bg-clip-text text-transparent">
-            EcoScore Analyzer
+          {/* Amazon logo with floating animation */}
+          <div className="inline-flex items-center gap-3 mb-8 animate-fade-in">
+            <img 
+              src={amazonLogo} 
+              alt="Amazon" 
+              className="w-12 h-12 hover-scale transition-all duration-300 hover:rotate-3" 
+            />
+            <div className="text-sm text-muted-foreground font-medium tracking-wide">
+              PRODUCT ANALYSIS
+            </div>
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-eco-good to-primary bg-clip-text text-transparent animate-fade-in hover:scale-105 transition-transform duration-300 cursor-default">
+            Amazon EcoScore Analyzer
           </h1>
-          <p className="text-xl text-muted-foreground mb-8">
+          <p className="text-xl text-muted-foreground mb-8 animate-fade-in delay-300">
             Discover the environmental impact of Amazon products with AI-powered analysis
           </p>
+          
+          {/* Animated indicators */}
+          <div className="flex justify-center gap-8 mb-8 animate-fade-in delay-500">
+            <div className="flex items-center gap-2 text-eco-good hover-scale cursor-default">
+              <div className="w-2 h-2 bg-eco-good rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium">Eco-Friendly</span>
+            </div>
+            <div className="flex items-center gap-2 text-primary hover-scale cursor-default">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse delay-300"></div>
+              <span className="text-sm font-medium">AI-Powered</span>
+            </div>
+            <div className="flex items-center gap-2 text-eco-excellent hover-scale cursor-default">
+              <div className="w-2 h-2 bg-eco-excellent rounded-full animate-pulse delay-700"></div>
+              <span className="text-sm font-medium">Instant Results</span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Main Content */}
       <section className="px-4 pb-20">
-        <div className="max-w-4xl mx-auto space-y-8">
-          {/* Amazon Integration Banner */}
-          <div className="flex items-center justify-center gap-3 p-4 bg-card rounded-lg border border-primary/10">
-            <img src={amazonLogo} alt="Amazon" className="w-8 h-8" />
-            <span className="text-muted-foreground">Powered by Amazon Product Data</span>
+        <div className="max-w-4xl mx-auto space-y-8">          
+          {/* URL Input with entrance animation */}
+          <div className="animate-fade-in delay-700">
+            <UrlInput 
+              onAnalyze={analyzeProduct}
+              isLoading={isAnalyzing}
+            />
           </div>
           
-          {/* URL Input */}
-          <UrlInput 
-            onAnalyze={analyzeProduct}
-            isLoading={isAnalyzing}
-          />
-          
-          {/* Results */}
+          {/* Results with staggered animation */}
           {results && (
-            <div className="animate-fade-in">
+            <div className="animate-fade-in animate-scale-in">
               <EcoScoreResults data={results} />
             </div>
           )}
