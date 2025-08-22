@@ -1,73 +1,56 @@
-# Welcome to your Lovable project
+https://lovable.dev/projects/1d7ad583-cfc2-4826-9451-34333be8a9c5
 
-## Project info
+Amazon product analysis tool that provides an detailed environmental/sustainability impact report.
 
-**URL**: https://lovable.dev/projects/1d7ad583-cfc2-4826-9451-34333be8a9c5
+### Setup Instructions
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/1d7ad583-cfc2-4826-9451-34333be8a9c5) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
+#### 1. Clone the repository
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone <repo-url>
+cd eco-parse-insight
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+#### 2. Install dependencies (frontend)
+```sh
+npm install
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+#### 3. Set up environment variables
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Create a `.env` file in the project root with the following:
+```env
+VITE_OPENAI_API_KEY=your-openai-api-key-here
+VITE_API_URL=http://localhost:4000
+```
+
+#### 4. Install backend dependencies
+```sh
+cd backend
+npm install
+```
+
+#### 5. Start the backend server
+```sh
+node server.js
+# or, if you use nodemon for auto-reload:
+# npx nodemon server.js
+```
+
+#### 6. Start the frontend (in a new terminal, from the project root)
+```sh
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+#### 7. Usage
+- Open your browser to the local address shown in the terminal (usually http://localhost:5173)
+- Paste an Amazon product URL and analyze its sustainability impact!
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Technologies Used
 
-**Use GitHub Codespaces**
+#### Frontend
+- Vite, React, Tailwind CSS
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/1d7ad583-cfc2-4826-9451-34333be8a9c5) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+#### Backend
+- OpenAI API (Analysis Generation)
+- Axios (Web Extraction)
+- Cheerio (HTML Parsing)

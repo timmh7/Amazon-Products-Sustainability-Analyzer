@@ -46,7 +46,7 @@ export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-foreground">Amazon Product Sustainability Analyzer</h2>
-          <p className="text-muted-foreground">Get an environmental impact analysis for Amazon products</p>
+          <p className="text-muted-foreground">Get an in-depth environmental impact analysis for Amazon products</p>
         </div>
       </div>
       
