@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Loader2, Leaf } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+// ...existing code...
 
 interface UrlInputProps {
   onAnalyze: (url: string) => void;
@@ -12,7 +12,7 @@ interface UrlInputProps {
 
 export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
   const [url, setUrl] = useState("");
-  const { toast } = useToast();
+  // ...existing code...
 
   const validateUrl = (url: string): boolean => {
     try {
@@ -25,22 +25,15 @@ export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+    // Handle error: URL required
     if (!url.trim()) {
-      toast({
-        title: "URL Required",
-        description: "Please enter an Amazon product URL",
-        variant: "destructive",
-      });
+      // Show error: URL Required (toast removed)
       return;
     }
 
+    // Handle error: Invalid URL
     if (!validateUrl(url)) {
-      toast({
-        title: "Invalid URL",
-        description: "Please enter a valid Amazon product URL",
-        variant: "destructive",
-      });
+      // Show error: Invalid URL (toast removed)
       return;
     }
 

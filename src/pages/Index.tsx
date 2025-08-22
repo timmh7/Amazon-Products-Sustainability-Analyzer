@@ -3,47 +3,44 @@ import { UrlInput } from "@/components/UrlInput";
 import { EcoScoreResults, EcoScoreData } from "@/components/EcoScoreResults";
 import heroImage from "@/assets/eco-hero.jpg";
 import amazonLogo from "@/assets/amazon-logo.png";
-import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<EcoScoreData | null>(null);
-  const { toast } = useToast();
 
   // API key provided by the system
-  const OPENAI_API_KEY = "sk-provided-by-system"; // This will be replaced with actual key
+  const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
   const analyzeProduct = async (url: string) => {
     setIsAnalyzing(true);
     try {
-      // Mock product data (since we can't scrape Amazon from frontend)
-      const mockProductData = getMockProductData(url);
-      const score = await getEcoScore(mockProductData, OPENAI_API_KEY);
-      setResults(score);
-    } catch (error) {
-      toast({
-        title: "Analysis Failed",
-        description: "Failed to analyze the product. Please try again.",
-        variant: "destructive",
+      // Call backend to extract product data from Amazon
+      const response = await fetch('http://localhost:4000/extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
       });
+
+      if (!response.ok) throw new Error('Failed to extract product data');
+      const extracted = await response.json();
+      console.log('Extracted product data:', extracted);
+
+      // Store title and description from extracted product data
+      const { title, description, features} = extracted;
+
+      // Combine extracted fields for AI analysis
+      const productData = `-Title: ${title}
+      -Description: ${description}
+      -Sustainability Features: ${features}`;
+
+      const score = await getEcoScore(productData, OPENAI_API_KEY);
+      setResults(score);
+
+    } catch (error) {
+      // Handle error without toast
     } finally {
       setIsAnalyzing(false);
     }
-  };
-
-  const getMockProductData = (url: string): string => {
-    // Extract product type from URL for better mock data
-    const urlLower = url.toLowerCase();
-    
-    if (urlLower.includes('electronics') || urlLower.includes('phone') || urlLower.includes('laptop')) {
-      return "Wireless Bluetooth Headphones - Premium Audio Quality with Active Noise Cancellation. Made with recycled plastic materials. Lightweight design with 30-hour battery life. Eco-friendly packaging.";
-    } else if (urlLower.includes('clothing') || urlLower.includes('shirt') || urlLower.includes('apparel')) {
-      return "Organic Cotton T-Shirt - 100% GOTS certified organic cotton. Sustainable manufacturing process. Fair trade certified. Biodegradable packaging materials.";
-    } else if (urlLower.includes('home') || urlLower.includes('kitchen')) {
-      return "Stainless Steel Water Bottle - BPA-free, dishwasher safe. Made from recycled stainless steel. Vacuum insulated design keeps drinks cold for 24 hours. Minimal plastic components.";
-    }
-    
-    return "Multi-purpose Household Item - Durable construction with mixed materials including plastic and metal components. Standard packaging. Ships in medium-sized box.";
   };
 
   const getEcoScore = async (productDescription: string, apiKey: string): Promise<EcoScoreData> => {
@@ -58,21 +55,26 @@ const Index = () => {
         messages: [
           {
             role: 'system',
-            content: `You are an environmental impact scoring assistant. Given a product description, output a JSON object with:
-- detected_materials: list of materials found in the product
-- shipping_weight_category: "light" | "medium" | "heavy" 
-- eco_friendly_keywords: list of eco-friendly terms found
-- estimated_score: number from 0-100 (100 = most eco-friendly)
-- explanation: short string summary of the environmental impact
+            content: 
+      `You are an expert environmental impact scoring assistant that is very strict. Given a product description, 
+      output a JSON object with:
 
-Respond only with valid JSON, no additional text.`
+      - detected_materials: list of materials found in the product
+      - sustain_certs: list of sustainability organization certifications offered (i.e climate pledge, cradle to cradle, etc. )
+      - shipping_weight_category: "light" | "medium" | "heavy", (if you do not know, make an educated guess based on the product)
+      - eco_friendly_keywords: list of eco-friendly terms found (terms MUST be related to environment)
+      - eco_warnings: list of pontetially harmful terms or materials found (doesn't have to be explicitly harmful, just questionable is enough)
+      - estimated_score: number from 0-100 (100 = most eco-friendly, be VERY strict on scoring, factor in product's historical environmental context)
+      - explanation: short string summary of the environmental impact, talk about positives and environmental concerns
+
+      Respond only with valid JSON, no additional text.`
           },
           {
             role: 'user',
             content: `Analyze this product: ${productDescription}`
           }
         ],
-        temperature: 0.3,
+        temperature: 0.1,
       }),
     });
 
@@ -90,6 +92,8 @@ Respond only with valid JSON, no additional text.`
         detected_materials: parsed.detected_materials || [],
         eco_friendly_keywords: parsed.eco_friendly_keywords || [],
         shipping_weight_category: parsed.shipping_weight_category || 'medium',
+        sustain_certs: parsed.sustain_certs || [],
+        eco_warnings: parsed.eco_warnings || [],
         explanation: parsed.explanation || 'Environmental impact analysis completed.',
       };
     } catch {
@@ -118,7 +122,7 @@ Respond only with valid JSON, no additional text.`
             <img 
               src={amazonLogo} 
               alt="Amazon" 
-              className="w-12 h-12 hover-scale transition-all duration-300 hover:rotate-3" 
+              className="w-12 h-12 transition-all duration-300" 
             />
             <div className="text-sm text-muted-foreground font-medium tracking-wide">
               PRODUCT ANALYSIS
@@ -133,20 +137,7 @@ Respond only with valid JSON, no additional text.`
           </p>
           
           {/* Animated indicators */}
-          <div className="flex justify-center gap-8 mb-8 animate-fade-in delay-500">
-            <div className="flex items-center gap-2 text-eco-good hover-scale cursor-default">
-              <div className="w-2 h-2 bg-eco-good rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium">Eco-Friendly</span>
-            </div>
-            <div className="flex items-center gap-2 text-primary hover-scale cursor-default">
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse delay-300"></div>
-              <span className="text-sm font-medium">AI-Powered</span>
-            </div>
-            <div className="flex items-center gap-2 text-eco-excellent hover-scale cursor-default">
-              <div className="w-2 h-2 bg-eco-excellent rounded-full animate-pulse delay-700"></div>
-              <span className="text-sm font-medium">Instant Results</span>
-            </div>
-          </div>
+          {/* Removed animated indicators and wording */}
         </div>
       </section>
 
