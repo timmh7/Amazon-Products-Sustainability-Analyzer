@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Loader2, Leaf } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import amazonLogo from "@/assets/amazon-logo.png";
 // ...existing code...
 
 interface UrlInputProps {
@@ -12,7 +13,7 @@ interface UrlInputProps {
 
 export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
   const [url, setUrl] = useState("");
-  // ...existing code...
+  const [error, setError] = useState<string | null>(null);
 
   const validateUrl = (url: string): boolean => {
     try {
@@ -25,30 +26,27 @@ export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle error: URL required
     if (!url.trim()) {
-      // Show error: URL Required (toast removed)
+      setError("Please enter a URL.");
       return;
     }
-
-    // Handle error: Invalid URL
     if (!validateUrl(url)) {
-      // Show error: Invalid URL (toast removed)
+      setError("Please enter a valid Amazon product URL.");
       return;
     }
-
+    setError(null);
     onAnalyze(url);
   };
 
   return (
-    <Card className="p-8 bg-eco-surface border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+  <Card className="p-8 bg-white border-primary/20 shadow-lg">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-primary rounded-lg hover-scale transition-all duration-300 hover:rotate-6">
-          <Leaf className="w-6 h-6 text-primary-foreground" />
+        <div className="p-2 bg-white rounded-lg">
+          <img src={amazonLogo} alt="Amazon" className="w-6 h-6" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-foreground hover:text-primary transition-colors duration-300">EcoScore Analyzer</h2>
-          <p className="text-muted-foreground">Get environmental impact scores for Amazon products</p>
+          <h2 className="text-2xl font-bold text-foreground">Amazon Product Sustainability Analyzer</h2>
+          <p className="text-muted-foreground">Get an environmental impact analysis for Amazon products</p>
         </div>
       </div>
       
@@ -61,11 +59,17 @@ export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
           id="url"
           type="url"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => {
+            setUrl(e.target.value);
+            if (error) setError(null);
+          }}
           placeholder="https://www.amazon.com/product-name/dp/XXXXXXXXXX"
           className="w-full transition-all duration-300 focus:scale-[1.02] hover:border-primary/40"
           disabled={isLoading}
         />
+        {error && (
+          <div className="text-sm text-red-600 mt-1">{error}</div>
+        )}
         </div>
         
         <Button
@@ -80,7 +84,8 @@ export const UrlInput = ({ onAnalyze, isLoading }: UrlInputProps) => {
             </>
           ) : (
             <>
-              <Leaf className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:rotate-12" />
+              {/* Keep the leaf icon for the button for now, or replace if desired */}
+              <svg className="w-4 h-4 mr-2 transition-transform duration-300 group-hover:rotate-12" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 21c.5-4.5 2.5-8 7-8s6.5 3.5 7 8M12 3v8m0 0l3-3m-3 3l-3-3" /></svg>
               Analyze EcoScore
             </>
           )}

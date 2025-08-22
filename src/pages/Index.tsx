@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { UrlInput } from "@/components/UrlInput";
 import { EcoScoreResults, EcoScoreData } from "@/components/EcoScoreResults";
-import heroImage from "@/assets/eco-hero.jpg";
-import amazonLogo from "@/assets/amazon-logo.png";
 
 const Index = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -15,7 +13,7 @@ const Index = () => {
     setIsAnalyzing(true);
     try {
       // Call backend to extract product data from Amazon
-      const response = await fetch('http://localhost:4000/extract', {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/extract`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
@@ -102,47 +100,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-eco-surface to-background">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-10 animate-fade-in"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        />
-        {/* Floating particles animation */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary/20 rounded-full animate-pulse"></div>
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-eco-good/30 rounded-full animate-pulse delay-300"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-primary/15 rounded-full animate-pulse delay-700"></div>
-        </div>
-        
-        <div className="relative max-w-4xl mx-auto text-center">
-          {/* Amazon logo with floating animation */}
-          <div className="inline-flex items-center gap-3 mb-8 animate-fade-in">
-            <img 
-              src={amazonLogo} 
-              alt="Amazon" 
-              className="w-12 h-12 transition-all duration-300" 
-            />
-            <div className="text-sm text-muted-foreground font-medium tracking-wide">
-              PRODUCT ANALYSIS
-            </div>
-          </div>
-          
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-eco-good to-primary bg-clip-text text-transparent animate-fade-in hover:scale-105 transition-transform duration-300 cursor-default">
-            Amazon EcoScore Analyzer
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 animate-fade-in delay-300">
-            Discover the environmental impact of Amazon products with AI-powered analysis
-          </p>
-          
-          {/* Animated indicators */}
-          {/* Removed animated indicators and wording */}
-        </div>
-      </section>
-
+  <div className="min-h-screen" style={{ backgroundColor: '#e6f4ea' }}>
       {/* Main Content */}
-      <section className="px-4 pb-20">
+    <section className="px-4 pb-20 pt-16">
         <div className="max-w-4xl mx-auto space-y-8">          
           {/* URL Input with entrance animation */}
           <div className="animate-fade-in delay-700">

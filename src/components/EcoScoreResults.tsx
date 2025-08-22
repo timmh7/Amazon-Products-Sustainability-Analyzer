@@ -18,11 +18,11 @@ interface EcoScoreResultsProps {
 }
 
 export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
+  // Custom color classes for score
   const getScoreColor = (score: number): string => {
-    if (score >= 80) return "eco-excellent";
-    if (score >= 60) return "eco-good";
-    if (score >= 40) return "eco-fair";
-    return "eco-poor";
+    if (score >= 80) return "text-[#17643b]"; // darker green
+    if (score >= 40) return "text-[#3bb273]"; // medium green
+    return "text-[#b91c1c]"; // dark red
   };
 
   const getScoreLabel = (score: number): string => {
@@ -48,15 +48,15 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
   return (
     <div className="space-y-6">
       {/* Main Score Card */}
-      <Card className="p-8 bg-gradient-to-br from-eco-surface to-background border-primary/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 animate-scale-in">
+  <Card className="p-8 bg-white border-primary/20 shadow-xl">
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full hover-scale transition-all duration-300 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full ">
             <Leaf className="w-5 h-5 text-primary animate-pulse" />
             <span className="text-sm font-medium text-primary">EcoScore</span>
           </div>
           
           <div className="space-y-2">
-            <div className={`text-6xl font-bold text-${getScoreColor(data.score)} hover-scale cursor-default transition-all duration-300 animate-fade-in delay-300`}>
+            <div className={`text-6xl font-bold ${getScoreColor(data.score)} cursor-default transition-all duration-300 animate-fade-in delay-300`}>
               {data.score}
             </div>
             <div className="text-xl font-semibold text-muted-foreground animate-fade-in delay-500">
@@ -120,12 +120,12 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
         {/* Shipping Weight */}
         <Card className="p-6 bg-card border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in delay-500">
           <div className="flex items-center gap-2 mb-4">
-            <Truck className="w-5 h-5 text-primary hover-scale transition-transform duration-300" />
+            <Truck className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold">Shipping Impact</h3>
           </div>
           
           <div className="flex items-center gap-3">
-            <span className="text-2xl hover-scale cursor-default transition-transform duration-300 animate-pulse">
+            <span className="text-2xl cursor-default transition-transform duration-300">
               {getWeightIcon(data.shipping_weight_category)}
             </span>
             <div>
@@ -140,7 +140,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
         </Card>
 
         {/* Warnings Grid */}
-        <Card className="p-6 bg-card border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in delay-300">
+  <Card className="p-6 bg-card border-primary/10 transition-all duration-300 animate-fade-in delay-300">
           <div className="flex items-center gap-2 mb-4">
             <Leaf className="w-5 h-5 text-eco-good hover-scale transition-transform duration-300" />
             <h3 className="text-lg font-semibold">Warnings</h3>
@@ -151,7 +151,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
               <Badge 
                 key={index} 
                 variant="secondary" 
-                className="capitalize hover-scale transition-all duration-300 hover:shadow-md animate-fade-in cursor-default"
+                className="capitalize bg-red-100 text-red-800 animate-fade-in cursor-default"
                 style={{ animationDelay: `${index * 100 + 500}ms` }}
               >
                 {material}
