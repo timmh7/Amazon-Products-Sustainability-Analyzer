@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Leaf, Package, Recycle, Truck } from "lucide-react";
+import warningImg from "@/assets/warning.png";
 
 export interface EcoScoreData {
   score: number;
@@ -67,7 +68,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
           <div className="animate-fade-in delay-700">
             <Progress 
               value={data.score} 
-              className="w-full h-3 bg-muted transition-all duration-1000 hover:h-4"
+              className="w-full h-3 bg-muted"
             />
           </div>
         </div>
@@ -76,9 +77,9 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
       {/* Details Grid */}
   <div className="grid md:grid-cols-2 gap-6">
         {/* Materials Card */}
-        <Card className="p-6 bg-card border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in delay-300">
+        <Card className="p-6 bg-card border-primary/10">
           <div className="flex items-center gap-2 mb-4">
-            <Package className="w-5 h-5 text-primary hover-scale transition-transform duration-300" />
+            <Package className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold">Detected Materials</h3>
           </div>
           
@@ -87,7 +88,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
               <Badge 
                 key={index} 
                 variant="secondary" 
-                className="capitalize hover-scale transition-all duration-300 hover:shadow-md animate-fade-in cursor-default"
+                className="capitalize"
                 style={{ animationDelay: `${index * 100 + 500}ms` }}
               >
                 {material}
@@ -97,9 +98,9 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
         </Card>
 
         {/* Sustainability Features Grid */}
-        <Card className="p-6 bg-card border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in delay-300">
+        <Card className="p-6 bg-card border-primary/10">
           <div className="flex items-center gap-2 mb-4">
-            <Leaf className="w-5 h-5 text-eco-good hover-scale transition-transform duration-300" />
+            <Leaf className="w-5 h-5 text-eco-good" />
             <h3 className="text-lg font-semibold">Sustainability Certifications</h3>
           </div>
           
@@ -108,7 +109,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
               <Badge 
                 key={index} 
                 variant="secondary" 
-                className="capitalize hover-scale transition-all duration-300 hover:shadow-md animate-fade-in cursor-default"
+                className="capitalize"
                 style={{ animationDelay: `${index * 100 + 500}ms` }}
               >
                 {material}
@@ -118,7 +119,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
         </Card>
 
         {/* Shipping Weight */}
-        <Card className="p-6 bg-card border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in delay-500">
+        <Card className="p-6 bg-card border-primary/10">
           <div className="flex items-center gap-2 mb-4">
             <Truck className="w-5 h-5 text-primary" />
             <h3 className="text-lg font-semibold">Shipping Impact</h3>
@@ -142,7 +143,7 @@ export const EcoScoreResults = ({ data }: EcoScoreResultsProps) => {
         {/* Warnings Grid */}
   <Card className="p-6 bg-card border-primary/10 transition-all duration-300 animate-fade-in delay-300">
           <div className="flex items-center gap-2 mb-4">
-            <Leaf className="w-5 h-5 text-eco-good hover-scale transition-transform duration-300" />
+            <img src={warningImg} alt="Warning" className="w-5 h-5" />
             <h3 className="text-lg font-semibold">Warnings</h3>
           </div>
           
