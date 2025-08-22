@@ -41,6 +41,47 @@ const Index = () => {
     }
   };
 
+  // Weighted sum model for eco score (to be implemented)
+  const calculateEcoScore = (data: any): number => {
+    let score = 0;
+
+    // --- 1. Sustainability Certifications (weight: 40) ---
+    let certPoints = data.sustain_certs.length * 20;
+    if (certPoints > 40) certPoints = 40;
+    score += certPoints;
+
+    // --- 2. Eco-friendly Keywords (weight: 20) ---
+    let keywordPoints = data.eco_friendly_keywords.length * 5;
+    if (keywordPoints > 20) keywordPoints = 20;
+    score += keywordPoints;
+
+    // --- 3. Materials (weight: 35) ---
+    let materialPoints = data.material_score;
+    if (materialPoints < 0) materialPoints = 0;
+    if (materialPoints > 35) materialPoints = 35;
+    score += materialPoints;
+
+    // --- 4. Shipping Weight Category (weight: 10) ---
+    if (data.shipping_weight_category === "light") {
+      score += 10;
+    } else if (data.shipping_weight_category === "medium") {
+      score += 7;
+    } else if (data.shipping_weight_category === "heavy") {
+      score += 3;
+    }
+
+    // --- 5. Eco Warnings (weight: -15) ---
+    let warningPenalty = data.eco_warnings.length * 5;
+    if (warningPenalty > 15) warningPenalty = 15;
+    score -= warningPenalty;
+
+    // --- Final clamp between 0 and 100 ---
+    if (score < 0) score = 0;
+    if (score > 100) score = 100;
+
+    return score;
+  };
+
   const getEcoScore = async (productDescription: string, apiKey: string): Promise<EcoScoreData> => {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -58,10 +99,12 @@ const Index = () => {
       output a JSON object with:
 
       - detected_materials: list of materials found in the product
+      - material_score: number from 0-15 reflecting how sustainable the detected materials are 
+        (40 = very eco-friendly, 0 = very harmful, be strict)
       - sustain_certs: list of sustainability organization certifications offered (i.e climate pledge, cradle to cradle, etc. )
       - shipping_weight_category: "light" | "medium" | "heavy", (if you do not know, make an educated guess based on the product)
       - eco_friendly_keywords: list of eco-friendly terms found (terms MUST be related to environment)
-      - eco_warnings: list of pontetially harmful terms or materials found (doesn't have to be explicitly harmful, just questionable is enough)
+      - eco_warnings: list of potentially harmful terms or materials found (doesn't have to be explicitly harmful, just questionable is enough)
       - estimated_score: number from 0-100 (100 = most eco-friendly, be VERY strict on scoring, factor in product's historical environmental context)
       - explanation: short string summary of the environmental impact, talk about positives and environmental concerns
 
@@ -85,8 +128,18 @@ const Index = () => {
     
     try {
       const parsed = JSON.parse(content);
+      // Calculate score using weighted sum model
+      const score = calculateEcoScore({
+        detected_materials: parsed.detected_materials || [],
+        material_score: parsed.material_score,
+        eco_friendly_keywords: parsed.eco_friendly_keywords || [],
+        shipping_weight_category: parsed.shipping_weight_category || 'medium',
+        sustain_certs: parsed.sustain_certs || [],
+        eco_warnings: parsed.eco_warnings || [],
+        explanation: parsed.explanation || 'Environmental impact analysis completed.'
+      });
       return {
-        score: parsed.estimated_score,
+        score,
         detected_materials: parsed.detected_materials || [],
         eco_friendly_keywords: parsed.eco_friendly_keywords || [],
         shipping_weight_category: parsed.shipping_weight_category || 'medium',
