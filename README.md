@@ -1,6 +1,11 @@
-amazonecoreport.onrender.com
 
-Amazon product analysis tool that provides a detailed environmental/sustainability impact report.
+[Try it here](https://amazonecoreport.onrender.com)
+
+## Project Overview
+
+This is a tool that analyzes Amazon product pages to provide a detailed environmental and sustainability impact report. By leveraging real-time web scraping and AI-powered analysis, the tool extracts product information directly from Amazon and generates a comprehensive report on the product's materials, features, and potential environmental impact.
+
+This project aims to help consumers make more informed, eco-conscious purchasing decisions by surfacing sustainability information that is often buried or difficult to interpret. The backend uses Axios and Cheerio to extract product data, and the OpenAI API to generate insightful, human-readable summaries.
 
 ### Setup Instructions
 
