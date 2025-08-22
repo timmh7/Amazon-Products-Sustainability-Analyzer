@@ -40,16 +40,18 @@ async function extractProductData(url) {
 
 // ROUTES
 app.post('/extract', async (req, res) => {
-    console.log("Extract route succesfully called...")
-    const { url } = req.body;
-    if (!url) return res.status(400).json({ error: 'Missing URL' });
+  console.log("Extract route succesfully called...")
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'Missing URL' });
 
-    try {
-        const data = await extractProductData(url);
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to extract product data' });
-    }
+  try {
+    const data = await extractProductData(url);
+    res.json(data);
+    console.log("/extract route finished for URL:", url);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to extract product data' });
+    console.log("/extract route finished with error for URL:", url);
+  }
 });
 
 app.listen(PORT, () => {
