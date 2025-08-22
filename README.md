@@ -1,6 +1,6 @@
-https://lovable.dev/projects/1d7ad583-cfc2-4826-9451-34333be8a9c5
+amazonecoreport.onrender.com
 
-Amazon product analysis tool that provides an detailed environmental/sustainability impact report.
+Amazon product analysis tool that provides a detailed environmental/sustainability impact report.
 
 ### Setup Instructions
 
@@ -20,6 +20,7 @@ npm install
 Create a `.env` file in the project root with the following:
 ```env
 VITE_OPENAI_API_KEY=your-openai-api-key-here
+# Change the below to your backend URL if hosting
 VITE_API_URL=http://localhost:4000
 ```
 
@@ -41,9 +42,13 @@ node server.js
 npm run dev
 ```
 
-#### 7. Usage
-- Open your browser to the local address shown in the terminal (usually http://localhost:5173)
-- Paste an Amazon product URL and analyze its sustainability impact!
+#### 7. If using a hosting service:
+```sh
+# Frontend Build Command
+npm run build
+# Publish directory
+dist
+```
 
 ### Technologies Used
 
